@@ -486,15 +486,15 @@ inline uint16_t BFloat16Impl<Derived>::ToUint16Impl(float v) noexcept {
   } else {
     auto get_msb_half = [](float fl) {
       uint16_t result;
-#ifdef __cpp_if_constexpr
-      if constexpr (detail::endian::native == detail::endian::little) {
-#else
-      if (detail::endian::native == detail::endian::little) {
-#endif
+// #ifdef __cpp_if_constexpr
+//       if constexpr (detail::endian::native == detail::endian::little) {
+// #else
+//       if (detail::endian::native == detail::endian::little) {
+// #endif
         std::memcpy(&result, reinterpret_cast<char*>(&fl) + sizeof(uint16_t), sizeof(uint16_t));
-      } else {
-        std::memcpy(&result, &fl, sizeof(uint16_t));
-      }
+      // } else {
+      //   std::memcpy(&result, &fl, sizeof(uint16_t));
+      // }
       return result;
     };
 
@@ -518,17 +518,17 @@ inline float BFloat16Impl<Derived>::ToFloatImpl() const noexcept {
   float result;
   char* const first = reinterpret_cast<char*>(&result);
   char* const second = first + sizeof(uint16_t);
-#ifdef __cpp_if_constexpr
-  if constexpr (detail::endian::native == detail::endian::little) {
-#else
-  if (detail::endian::native == detail::endian::little) {
-#endif
+// #ifdef __cpp_if_constexpr
+//   if constexpr (detail::endian::native == detail::endian::little) {
+// #else
+//   if (detail::endian::native == detail::endian::little) {
+// #endif
     std::memset(first, 0, sizeof(uint16_t));
     std::memcpy(second, &val, sizeof(uint16_t));
-  } else {
-    std::memcpy(first, &val, sizeof(uint16_t));
-    std::memset(second, 0, sizeof(uint16_t));
-  }
+  // } else {
+  //   std::memcpy(first, &val, sizeof(uint16_t));
+  //   std::memset(second, 0, sizeof(uint16_t));
+  // }
   return result;
 }
 
