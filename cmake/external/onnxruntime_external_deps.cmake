@@ -32,7 +32,15 @@ include(FetchContent)
 
 # ABSL should be included before protobuf because protobuf may use absl
 include(external/abseil-cpp.cmake)
-
+if(EXISTS "${CMAKE_BINARY_DIR}/_deps/abseil_cpp-subbuild")
+  # Copy the entire subbuild folder into build
+  add_custom_target(fix_abseil_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/abseil_cpp-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/abseil_cpp-build
+    COMMENT "Renaming Abseil subbuild → build so install() can find it"
+  )
+endif()
 set(RE2_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 
 onnxruntime_fetchcontent_declare(
@@ -43,6 +51,16 @@ onnxruntime_fetchcontent_declare(
     FIND_PACKAGE_ARGS NAMES re2
 )
 onnxruntime_fetchcontent_makeavailable(re2)
+
+if(EXISTS "${CMAKE_BINARY_DIR}/_deps/re2-subbuild")
+  # Copy the entire subbuild folder into build
+  add_custom_target(fix_re2_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/re2-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/re2-build
+    COMMENT "Renaming re2 subbuild → build so install() can find it"
+  )
+endif()
 
 if (onnxruntime_BUILD_UNIT_TESTS)
   # WebAssembly threading support in Node.js is still an experimental feature and
@@ -214,6 +232,17 @@ include(protobuf_function)
 #protobuf end
 
 onnxruntime_fetchcontent_makeavailable(Protobuf)
+
+if(EXISTS "${CMAKE_BINARY_DIR}/_deps/protobuf-subbuild")
+# Copy the entire subbuild folder into build
+  add_custom_target(fix_protobuf_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/protobuf-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/protobuf-build
+    COMMENT "Renaming protobuf subbuild → build so install() can find it"
+  )
+endif()
+
 if(Protobuf_FOUND)
   message(STATUS "Using protobuf from find_package(or vcpkg). Protobuf version: ${Protobuf_VERSION}")
 else()
@@ -274,6 +303,15 @@ onnxruntime_fetchcontent_declare(
   FIND_PACKAGE_ARGS 3...<4 NAMES date
 )
 onnxruntime_fetchcontent_makeavailable(date)
+if(EXISTS "${CMAKE_BINARY_DIR}/_deps/date-subbuild")
+  # Copy the entire subbuild folder into build
+  add_custom_target(fix_date_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/date-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/date-build
+    COMMENT "Renaming date subbuild → build so install() can find it"
+  )
+endif()
 
 if(NOT TARGET Boost::mp11)
   if(onnxruntime_USE_VCPKG)
@@ -305,6 +343,15 @@ onnxruntime_fetchcontent_declare(
     FIND_PACKAGE_ARGS 3.10 NAMES nlohmann_json
 )
 onnxruntime_fetchcontent_makeavailable(nlohmann_json)
+if(EXISTS "${CMAKE_BINARY_DIR}/_deps/nlohmann_json-subbuild")
+  # Copy the entire subbuild folder into build
+  add_custom_target(fix_nlohmann_json_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/nlohmann_json-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/nlohmann_json-build
+    COMMENT "Renaming nlohmann_json subbuild → build so install() can find it"
+  )
+endif()
 
 #TODO: include clog first
 if (onnxruntime_ENABLE_CPUINFO)
@@ -379,6 +426,15 @@ if (CPUINFO_SUPPORTED)
   endif()
   set(ONNXRUNTIME_CPUINFO_PROJ pytorch_cpuinfo)
   onnxruntime_fetchcontent_makeavailable(${ONNXRUNTIME_CPUINFO_PROJ})
+  if(EXISTS "${CMAKE_BINARY_DIR}/_deps/pytorch_cpuinfo-subbuild")
+  # Copy the entire subbuild folder into build
+  add_custom_target(fix_pytorch_cpuinfo_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/pytorch_cpuinfo-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/pytorch_cpuinfo-build
+    COMMENT "Renaming pytorch_cpuinfo subbuild → build so install() can find it"
+  )
+endif()
   if(TARGET cpuinfo::cpuinfo AND NOT TARGET cpuinfo)
     message(STATUS "Aliasing cpuinfo::cpuinfo to cpuinfo")
     add_library(cpuinfo ALIAS cpuinfo::cpuinfo)
@@ -406,6 +462,15 @@ endif()
 set(GSL_TARGET "Microsoft.GSL::GSL")
 set(GSL_INCLUDE_DIR "$<TARGET_PROPERTY:${GSL_TARGET},INTERFACE_INCLUDE_DIRECTORIES>")
 onnxruntime_fetchcontent_makeavailable(GSL)
+if(EXISTS "${CMAKE_BINARY_DIR}/_deps/gsl-subbuild")
+  # Copy the entire subbuild folder into build
+  add_custom_target(fix_gsl_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/gsl-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/gsl-build
+    COMMENT "Renaming gsl subbuild → build so install() can find it"
+  )
+endif()
 
 find_path(safeint_SOURCE_DIR NAMES "SafeInt.hpp")
 if(NOT safeint_SOURCE_DIR)
@@ -453,6 +518,15 @@ onnxruntime_fetchcontent_declare(
 )
 
 onnxruntime_fetchcontent_makeavailable(flatbuffers)
+if(EXISTS "${CMAKE_BINARY_DIR}/_deps/flatbuffers-subbuild")
+  # Copy the entire subbuild folder into build
+  add_custom_target(fix_flatbuffers_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/flatbuffers-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/flatbuffers-build
+    COMMENT "Renaming flatbuffers subbuild → build so install() can find it"
+  )
+endif()
 if(NOT flatbuffers_FOUND)
   if(NOT TARGET flatbuffers::flatbuffers)
     add_library(flatbuffers::flatbuffers ALIAS flatbuffers)
@@ -518,6 +592,15 @@ onnxruntime_fetchcontent_declare(
 )
 
 onnxruntime_fetchcontent_makeavailable(onnx)
+if(EXISTS "${CMAKE_BINARY_DIR}/_deps/onnx-subbuild")
+  # Copy the entire subbuild folder into build
+  add_custom_target(fix_onnx_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/onnx-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/onnx-build
+    COMMENT "Renaming onnx subbuild → build so install() can find it"
+  )
+endif()
 
 if(TARGET ONNX::onnx AND NOT TARGET onnx)
   message(STATUS "Aliasing ONNX::onnx to onnx")

@@ -11,3 +11,12 @@ onnxruntime_fetchcontent_declare(
     EXCLUDE_FROM_ALL
 )
 onnxruntime_fetchcontent_makeavailable(Eigen3)
+if(EXISTS "${CMAKE_BINARY_DIR}/_deps/eigen3-subbuild")
+  # Copy the entire subbuild folder into build
+  add_custom_target(fix_eigen3_build_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_BINARY_DIR}/_deps/eigen3-subbuild
+      ${CMAKE_BINARY_DIR}/_deps/eigen3-build
+    COMMENT "Renaming eigen3 subbuild → build so install() can find it"
+  )
+endif()
