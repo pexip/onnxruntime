@@ -326,6 +326,15 @@ if(NOT TARGET Boost::mp11)
      FIND_PACKAGE_ARGS NAMES Boost
     )
     onnxruntime_fetchcontent_makeavailable(mp11)
+    if(EXISTS "${CMAKE_BINARY_DIR}/_deps/mp11-subbuild")
+      # Copy the entire subbuild folder into build
+      add_custom_target(fix_mp11_build_dir ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+          ${CMAKE_BINARY_DIR}/_deps/mp11-subbuild
+          ${CMAKE_BINARY_DIR}/_deps/mp11-build
+      COMMENT "Renaming mp11 subbuild → build so install() can find it"
+      )
+    endif()
     if(NOT TARGET Boost::mp11)
       add_library(Boost::mp11 ALIAS Boost::headers)
     endif()
