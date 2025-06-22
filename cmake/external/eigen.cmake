@@ -7,7 +7,7 @@ set(EIGEN_BUILD_CMAKE_PACKAGE ON CACHE BOOL "" FORCE)
 onnxruntime_fetchcontent_declare(
     Eigen3
     URL ${DEP_URL_eigen}
-    URL_HASH SHA1=${DEP_SHA1_eigen}
+    URL_HASH ""
     EXCLUDE_FROM_ALL
 )
 onnxruntime_fetchcontent_makeavailable(Eigen3)
