@@ -648,7 +648,7 @@ else()
           ${MLAS_SRC_DIR}/rotary_embedding_kernel_avx2.cpp
           ${MLAS_SRC_DIR}/rotary_embedding_kernel_avx2.cpp
         )
-        if(CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 13.1 AND NOT(APPLE))
+        if(CMAKE_CXX_COMPILER_VERSION GREATER_EQUAL 13.1 AND NOT(APPLE) AND (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang"))
           set(mlas_platform_srcs_avx2
             ${mlas_platform_srcs_avx2}
             ${MLAS_SRC_DIR}/x86_64/cvtfp16Avx.S
