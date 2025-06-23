@@ -1757,6 +1757,7 @@ endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Android")
   list(APPEND onnxruntime_EXTERNAL_LIBRARIES log)
+  add_definitions(-DNO_GETAUXVAL)
 endif()
 
 # check if we need to link against librt on Linux

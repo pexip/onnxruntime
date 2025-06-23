@@ -19,7 +19,9 @@ limitations under the License.
 #include <assert.h>
 #include <dlfcn.h>
 #include <fcntl.h>
-#include <ftw.h>
+#ifndef __ANDROID__
+  #include <ftw.h>
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
@@ -495,9 +497,11 @@ class PosixEnv : public Env {
   }
 
   common::Status DeleteFolder(const PathString& path) const override {
-    const auto result = nftw(
-        path.c_str(), &nftw_remove, 32, FTW_DEPTH | FTW_PHYS);
-    ORT_RETURN_IF_NOT(result == 0, "DeleteFolder(): nftw() failed with error: ", result);
+    #ifndef __ANDROID__
+      const auto result = nftw(
+          path.c_str(), &nftw_remove, 32, FTW_DEPTH | FTW_PHYS);
+      ORT_RETURN_IF_NOT(result == 0, "DeleteFolder(): nftw() failed with error: ", result);
+    #endif
     return Status::OK();
   }
 

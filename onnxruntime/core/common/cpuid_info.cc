@@ -198,13 +198,18 @@ void CPUIDInfo::ArmLinuxInit() {
   } else
 #endif  // defined(CPUINFO_SUPPORTED)
   {
-    has_arm_neon_dot_ = ((getauxval(AT_HWCAP) & HWCAP_ASIMDDP) != 0);
-    has_fp16_ |= has_arm_neon_dot_;
-
-    has_arm_neon_i8mm_ = ((getauxval(AT_HWCAP2) & HWCAP2_I8MM) != 0);
-    has_arm_sve_i8mm_ = ((getauxval(AT_HWCAP2) & HWCAP2_SVEI8MM) != 0);
-
-    has_arm_neon_bf16_ = ((getauxval(AT_HWCAP2) & HWCAP2_BF16) != 0);
+    #ifdef NO_GETAUXVAL
+      has_arm_neon_dot_ = false;
+      has_arm_neon_i8mm_ = false;
+      has_arm_sve_i8mm_ = false;
+      has_arm_neon_bf16_ = false;
+    #else
+      has_arm_neon_dot_ = ((getauxval(AT_HWCAP) & HWCAP_ASIMDDP) != 0);
+      has_fp16_ |= has_arm_neon_dot_;
+      has_arm_neon_i8mm_ = ((getauxval(AT_HWCAP2) & HWCAP2_I8MM) != 0);
+      has_arm_sve_i8mm_ = ((getauxval(AT_HWCAP2) & HWCAP2_SVEI8MM) != 0);
+      has_arm_neon_bf16_ = ((getauxval(AT_HWCAP2) & HWCAP2_BF16) != 0);
+    #endif
   }
 }
 
