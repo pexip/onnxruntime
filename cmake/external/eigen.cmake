@@ -6,8 +6,8 @@ set(EIGEN_BUILD_CMAKE_PACKAGE ON CACHE BOOL "" FORCE)
 
 onnxruntime_fetchcontent_declare(
     Eigen3
-    URL ${DEP_URL_eigen}
-    URL_HASH ""
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/eigen/eigen-1d8b82b0740839c0de7f1242a3585e3390ff5f33.zip
+    URL_HASH SHA1=${DEP_SHA1_eigen}
     EXCLUDE_FROM_ALL
 )
 onnxruntime_fetchcontent_makeavailable(Eigen3)
