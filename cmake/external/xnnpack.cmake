@@ -17,11 +17,11 @@ if(CMAKE_ANDROID_ARCH_ABI STREQUAL armeabi-v7a)
 endif()
 
 # pthreadpool depends on fxdiv
-onnxruntime_fetchcontent_declare(fxdiv URL ${DEP_URL_fxdiv} URL_HASH SHA1=${DEP_SHA1_fxdiv} EXCLUDE_FROM_ALL FIND_PACKAGE_ARGS NAMES fxdiv)
+onnxruntime_fetchcontent_declare(fxdiv URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/fxdiv/FXdiv-63058eff77e11aa15bf531df5dd34395ec3017c8.zip URL_HASH SHA1=${DEP_SHA1_fxdiv} EXCLUDE_FROM_ALL FIND_PACKAGE_ARGS NAMES fxdiv)
 onnxruntime_fetchcontent_makeavailable(fxdiv)
 set(FXDIV_SOURCE_DIR ${fxdiv_SOURCE_DIR})
 
-onnxruntime_fetchcontent_declare(pthreadpool URL ${DEP_URL_pthreadpool} URL_HASH SHA1=${DEP_SHA1_pthreadpool} EXCLUDE_FROM_ALL FIND_PACKAGE_ARGS NAMES unofficial-pthreadpool)
+onnxruntime_fetchcontent_declare(pthreadpool URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/pthreadpool/4e80ca24521aa0fb3a746f9ea9c3eaa20e9afbb0 URL_HASH SHA1=${DEP_SHA1_pthreadpool} EXCLUDE_FROM_ALL FIND_PACKAGE_ARGS NAMES unofficial-pthreadpool)
 onnxruntime_fetchcontent_makeavailable(pthreadpool)
 
 # ---  Determine target processor

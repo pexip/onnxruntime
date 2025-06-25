@@ -1,7 +1,7 @@
 
 onnxruntime_fetchcontent_declare(
   cudnn_frontend
-  URL ${DEP_URL_cudnn_frontend}
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/cudnn_frontend/cudnn-frontend-1.7.0.zip
   URL_HASH SHA1=${DEP_SHA1_cudnn_frontend}
   EXCLUDE_FROM_ALL
 )

@@ -24,7 +24,7 @@ endif()
 # that namespace at build time.
 onnxruntime_fetchcontent_declare(
     abseil_cpp
-    URL ${DEP_URL_abseil_cpp}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/abseil/abseil-cpp-20240722.0.zip
     URL_HASH SHA1=${DEP_SHA1_abseil_cpp}
     EXCLUDE_FROM_ALL
     PATCH_COMMAND ${ABSL_PATCH_COMMAND}

@@ -3,7 +3,7 @@ set(PATCH_GFX12X ${PROJECT_SOURCE_DIR}/patches/composable_kernel/Add_gfx12x_supp
 
 include(FetchContent)
 onnxruntime_fetchcontent_declare(composable_kernel
-  URL ${DEP_URL_composable_kernel}
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/composable_kernel/composable_kernel-204da9c522cebec5220bba52cd3542ebcaf99e7a.zip
   URL_HASH SHA1=${DEP_SHA1_composable_kernel}
   PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PATCH_CLANG} &&
                 ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PATCH_GFX12X}

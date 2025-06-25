@@ -45,7 +45,7 @@ set(RE2_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 
 onnxruntime_fetchcontent_declare(
     re2
-    URL ${DEP_URL_re2}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/re2/re2-2024-07-02.zip
     URL_HASH SHA1=${DEP_SHA1_re2}
     EXCLUDE_FROM_ALL
     FIND_PACKAGE_ARGS NAMES re2
@@ -134,7 +134,7 @@ if(NOT ONNX_CUSTOM_PROTOC_EXECUTABLE AND NOT onnxruntime_USE_VCPKG)
     # Using CMAKE_CROSSCOMPILING is not recommended for Apple target devices.
     # https://cmake.org/cmake/help/v3.26/variable/CMAKE_CROSSCOMPILING.html
     # To keep it simple, just download and use the universal protoc binary for all Apple host builds.
-    onnxruntime_fetchcontent_declare(protoc_binary URL ${DEP_URL_protoc_mac_universal} URL_HASH SHA1=${DEP_SHA1_protoc_mac_universal} EXCLUDE_FROM_ALL)
+    onnxruntime_fetchcontent_declare(protoc_binary URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/protobuf/protoc-21.12-osx-universal_binary.zip URL_HASH SHA1=${DEP_SHA1_protoc_mac_universal} EXCLUDE_FROM_ALL)
     FetchContent_Populate(protoc_binary)
     if(protoc_binary_SOURCE_DIR)
       message(STATUS "Use prebuilt protoc")
@@ -159,13 +159,13 @@ if(NOT ONNX_CUSTOM_PROTOC_EXECUTABLE AND NOT onnxruntime_USE_VCPKG)
       endif()
     elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
       if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64)$")
-        onnxruntime_fetchcontent_declare(protoc_binary URL ${DEP_URL_protoc_linux_x64} URL_HASH SHA1=${DEP_SHA1_protoc_linux_x64} EXCLUDE_FROM_ALL)
+        onnxruntime_fetchcontent_declare(protoc_binary URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/protobuf/protoc-21.12-linux-x86_64.zip URL_HASH SHA1=${DEP_SHA1_protoc_linux_x64} EXCLUDE_FROM_ALL)
         FetchContent_Populate(protoc_binary)
       elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86|x86?)$")
         onnxruntime_fetchcontent_declare(protoc_binary URL ${DEP_URL_protoc_linux_x86} URL_HASH SHA1=${DEP_SHA1_protoc_linux_x86} EXCLUDE_FROM_ALL)
         FetchContent_Populate(protoc_binary)
       elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^aarch64.*")
-        onnxruntime_fetchcontent_declare(protoc_binary URL ${DEP_URL_protoc_linux_aarch64} URL_HASH SHA1=${DEP_SHA1_protoc_linux_aarch64} EXCLUDE_FROM_ALL)
+        onnxruntime_fetchcontent_declare(protoc_binary URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/protobuf/protoc-21.12-linux-aarch_64.zip URL_HASH SHA1=${DEP_SHA1_protoc_linux_aarch64} EXCLUDE_FROM_ALL)
         FetchContent_Populate(protoc_binary)
       endif()
 
@@ -205,7 +205,7 @@ endif()
 #Protobuf depends on absl and utf8_range
 onnxruntime_fetchcontent_declare(
   Protobuf
-  URL ${DEP_URL_protobuf}
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/protobuf/protobuf-21.12.zip
   URL_HASH SHA1=${DEP_SHA1_protobuf}
   PATCH_COMMAND ${ONNXRUNTIME_PROTOBUF_PATCH_COMMAND}
   EXCLUDE_FROM_ALL
@@ -297,7 +297,7 @@ set(USE_SYSTEM_TZ_DB  ON CACHE BOOL "" FORCE)
 
 onnxruntime_fetchcontent_declare(
   date
-  URL ${DEP_URL_date}
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/date/date-3.0.1.zip
   URL_HASH SHA1=${DEP_SHA1_date}
   EXCLUDE_FROM_ALL
   FIND_PACKAGE_ARGS 3...<4 NAMES date
@@ -321,7 +321,7 @@ if(NOT TARGET Boost::mp11)
   else()
     onnxruntime_fetchcontent_declare(
      mp11
-     URL ${DEP_URL_mp11}
+     URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/mp11/mp11-boost-1.82.0.zip
      EXCLUDE_FROM_ALL
      FIND_PACKAGE_ARGS NAMES Boost
     )
@@ -346,7 +346,7 @@ set(JSON_Install OFF CACHE INTERNAL "")
 
 onnxruntime_fetchcontent_declare(
     nlohmann_json
-    URL ${DEP_URL_json}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/nlohman_json/json-3.11.3.zip
     URL_HASH SHA1=${DEP_SHA1_json}
     EXCLUDE_FROM_ALL
     FIND_PACKAGE_ARGS 3.10 NAMES nlohmann_json
@@ -418,7 +418,7 @@ if (CPUINFO_SUPPORTED)
       message(STATUS "Applying a patch for Windows ARM64/ARM64EC in cpuinfo")
       onnxruntime_fetchcontent_declare(
         pytorch_cpuinfo
-        URL ${DEP_URL_pytorch_cpuinfo}
+        URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/cpuinfo/cpuinfo-8a1772a0c5c447df2d18edf33ec4603a8c9c04a6.zip
         URL_HASH SHA1=${DEP_SHA1_pytorch_cpuinfo}
         EXCLUDE_FROM_ALL
         PATCH_COMMAND ${Patch_EXECUTABLE} -p1 < ${PROJECT_SOURCE_DIR}/patches/cpuinfo/9bb12d342fd9479679d505d93a478a6f9cd50a47.patch
@@ -427,7 +427,7 @@ if (CPUINFO_SUPPORTED)
   else()
       onnxruntime_fetchcontent_declare(
         pytorch_cpuinfo
-        URL ${DEP_URL_pytorch_cpuinfo}
+        URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/cpuinfo/cpuinfo-8a1772a0c5c447df2d18edf33ec4603a8c9c04a6.zip
         URL_HASH SHA1=${DEP_SHA1_pytorch_cpuinfo}
         EXCLUDE_FROM_ALL
         FIND_PACKAGE_ARGS NAMES cpuinfo
@@ -453,7 +453,7 @@ endif()
 if(onnxruntime_USE_CUDA)
   onnxruntime_fetchcontent_declare(
     GSL
-    URL ${DEP_URL_microsoft_gsl}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/gsl/GSL-4.0.0.zip
     URL_HASH SHA1=${DEP_SHA1_microsoft_gsl}
     PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PROJECT_SOURCE_DIR}/patches/gsl/1064.patch
     EXCLUDE_FROM_ALL
@@ -462,7 +462,7 @@ if(onnxruntime_USE_CUDA)
 else()
   onnxruntime_fetchcontent_declare(
     GSL
-    URL ${DEP_URL_microsoft_gsl}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/gsl/GSL-4.0.0.zip
     URL_HASH SHA1=${DEP_SHA1_microsoft_gsl}
     EXCLUDE_FROM_ALL
     FIND_PACKAGE_ARGS 4.0 NAMES Microsoft.GSL
@@ -486,7 +486,7 @@ if(NOT safeint_SOURCE_DIR)
   unset(safeint_SOURCE_DIR)
   onnxruntime_fetchcontent_declare(
       safeint
-      URL ${DEP_URL_safeint}
+      URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/safeint/SafeInt-3.0.28.zip
       URL_HASH SHA1=${DEP_SHA1_safeint}
       EXCLUDE_FROM_ALL
   )
@@ -519,7 +519,7 @@ endif()
 #flatbuffers 1.11.0 does not have flatbuffers::IsOutRange, therefore we require 1.12.0+
 onnxruntime_fetchcontent_declare(
     flatbuffers
-    URL ${DEP_URL_flatbuffers}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/flatbuffers/flatbuffers-23.5.26.zip
     URL_HASH SHA1=${DEP_SHA1_flatbuffers}
     PATCH_COMMAND ${ONNXRUNTIME_FLATBUFFERS_PATCH_COMMAND}
     EXCLUDE_FROM_ALL
@@ -593,7 +593,7 @@ endif()
 endif()
 onnxruntime_fetchcontent_declare(
   onnx
-  URL ${DEP_URL_onnx}
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/onnx/onnx-7fc2b81a275223f5b02a522d9d2649837542a7be.zip
   URL_HASH SHA1=${DEP_SHA1_onnx}
   PATCH_COMMAND ${ONNXRUNTIME_ONNX_PATCH_COMMAND}
   EXCLUDE_FROM_ALL
@@ -683,7 +683,7 @@ if(onnxruntime_ENABLE_DLPACK)
 
   onnxruntime_fetchcontent_declare(
     dlpack
-    URL ${DEP_URL_dlpack}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/dlpack/dlpack-0.6.zip
     URL_HASH SHA1=${DEP_SHA1_dlpack}
     EXCLUDE_FROM_ALL
     FIND_PACKAGE_ARGS NAMES dlpack
@@ -841,17 +841,17 @@ if(onnxruntime_USE_COREML)
   # Setup coremltools fp16 and json dependencies for creating an mlpackage.
   #
   # fp16 depends on psimd
-  onnxruntime_fetchcontent_declare(psimd URL ${DEP_URL_psimd} URL_HASH SHA1=${DEP_SHA1_psimd} EXCLUDE_FROM_ALL)
+  onnxruntime_fetchcontent_declare(psimd URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/psimd/psimd-072586a71b55b7f8c584153d223e95687148a900.zip URL_HASH SHA1=${DEP_SHA1_psimd} EXCLUDE_FROM_ALL)
   onnxruntime_fetchcontent_makeavailable(psimd)
   set(PSIMD_SOURCE_DIR ${psimd_SOURCE_DIR})
-  onnxruntime_fetchcontent_declare(fp16 URL ${DEP_URL_fp16} URL_HASH SHA1=${DEP_SHA1_fp16} EXCLUDE_FROM_ALL)
+  onnxruntime_fetchcontent_declare(fp16 URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/fp16/FP16-0a92994d729ff76a58f692d3028ca1b64b145d91.zip URL_HASH SHA1=${DEP_SHA1_fp16} EXCLUDE_FROM_ALL)
   set(FP16_BUILD_TESTS OFF CACHE INTERNAL "")
   set(FP16_BUILD_BENCHMARKS OFF CACHE INTERNAL "")
   onnxruntime_fetchcontent_makeavailable(fp16)
 
   onnxruntime_fetchcontent_declare(
     coremltools
-    URL ${DEP_URL_coremltools}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/coremltools/coremltools-7.1.zip
     URL_HASH SHA1=${DEP_SHA1_coremltools}
     PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PROJECT_SOURCE_DIR}/patches/coremltools/crossplatformbuild.patch
     EXCLUDE_FROM_ALL

@@ -105,7 +105,7 @@ if (onnxruntime_USE_VCPKG)
 else()
   onnxruntime_fetchcontent_declare(
     directx_headers
-    URL ${DEP_URL_directx_headers}
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/external/mirrors/directx_headers/DirectX-Headers-1.613.1.zip
     URL_HASH SHA1=${DEP_SHA1_directx_headers}
     EXCLUDE_FROM_ALL
   )
