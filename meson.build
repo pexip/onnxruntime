@@ -1,5 +1,6 @@
 project('onnxruntime_static_combined', ['cpp','c'])
-
+buildtype = get_option('buildtype')
+fs = import('fs')
 ortlibdir = meson.current_build_dir() 
 depsdir = join_paths(ortlibdir, '_deps')
 absl_libdir = join_paths(ortlibdir, '_deps', 'abseil_cpp-build', 'absl')
@@ -12,39 +13,56 @@ absl_timedir = join_paths(absl_libdir,'time')
 absl_synchdir = join_paths(absl_libdir,'synchronization')
 absl_numericdir = join_paths(absl_libdir,'numeric')
 absl_containerdir = join_paths(absl_libdir,'container')
-absl_deps2_list = [
-  files(join_paths(absl_basedir, 'libabsl_base.a')),
-  files(join_paths(absl_stringsdir, 'libabsl_strings.a')),
-  files(join_paths(absl_stringsdir, 'libabsl_strings_internal.a')),  
-  files(join_paths(absl_basedir, 'libabsl_strerror.a')),
-  files(join_paths(absl_stringsdir,'libabsl_str_format_internal.a')),
-  files(join_paths(absl_basedir,'libabsl_raw_logging_internal.a')),
-  files(join_paths(absl_logdir,'libabsl_log_internal_message.a')),
-  files(join_paths(absl_debuggingdir,'libabsl_debugging_internal.a')),
-  files(join_paths(absl_debuggingdir,'libabsl_stacktrace.a')),
-  files(join_paths(absl_debuggingdir,'libabsl_symbolize.a')),
-  files(join_paths(absl_debuggingdir,'libabsl_examine_stack.a')),
-  files(join_paths(absl_debuggingdir,'libabsl_demangle_rust.a')),  
-  files(join_paths(absl_debuggingdir,'libabsl_demangle_internal.a')),
-  files(join_paths(absl_debuggingdir,'libabsl_decode_rust_punycode.a')), 
-  files(join_paths(absl_debuggingdir,'libabsl_utf8_for_code_point.a')),
-  files(join_paths(absl_logdir,'libabsl_log_initialize.a')),
-  files(join_paths(absl_logdir,'libabsl_log_internal_globals.a')),
-  files(join_paths(absl_logdir,'libabsl_vlog_config_internal.a')),
-  files(join_paths(absl_logdir,'libabsl_log_internal_proto.a')),
-  files(join_paths(absl_logdir,'libabsl_log_internal_format.a')),
-  files(join_paths(absl_logdir,'libabsl_log_internal_log_sink_set.a')),
-  files(join_paths(absl_logdir,'libabsl_log_sink.a')),
-  files(join_paths(absl_logdir,'libabsl_log_internal_fnmatch.a')),
-  files(join_paths(absl_basedir,'libabsl_malloc_internal.a')),
-  files(join_paths(absl_synchdir,'libabsl_kernel_timeout_internal.a')),
-  files(join_paths(absl_basedir,'libabsl_spinlock_wait.a')),
-  files(join_paths(absl_synchdir,'libabsl_synchronization.a')),
-  files(join_paths(absl_numericdir,'libabsl_int128.a')),
-  files(join_paths(absl_logdir,'libabsl_log_globals.a')),
-  files(join_paths(absl_timedir,'libabsl_time.a')),
-  files(join_paths(absl_timedir,'libabsl_time_zone.a')),    
+absl_deps2_base_list = [
+  join_paths(absl_basedir, 'libabsl_base.a'),
+  join_paths(absl_stringsdir, 'libabsl_strings.a'),
+  join_paths(absl_stringsdir, 'libabsl_strings_internal.a'),  
+  join_paths(absl_basedir, 'libabsl_strerror.a'),
+  join_paths(absl_stringsdir,'libabsl_str_format_internal.a'),
+  join_paths(absl_basedir,'libabsl_raw_logging_internal.a'),
+  join_paths(absl_logdir,'libabsl_log_internal_message.a'),
+  join_paths(absl_debuggingdir,'libabsl_debugging_internal.a'),
+  join_paths(absl_debuggingdir,'libabsl_stacktrace.a'),
+  join_paths(absl_debuggingdir,'libabsl_symbolize.a'),
+  join_paths(absl_debuggingdir,'libabsl_examine_stack.a'),
+  join_paths(absl_debuggingdir,'libabsl_demangle_rust.a'),  
+  join_paths(absl_debuggingdir,'libabsl_demangle_internal.a'),
+  join_paths(absl_debuggingdir,'libabsl_decode_rust_punycode.a'), 
+  join_paths(absl_debuggingdir,'libabsl_utf8_for_code_point.a'),
+  join_paths(absl_logdir,'libabsl_log_initialize.a'),
+  join_paths(absl_logdir,'libabsl_log_internal_globals.a'),
+  join_paths(absl_logdir,'libabsl_vlog_config_internal.a'),
+  join_paths(absl_logdir,'libabsl_log_internal_proto.a'),
+  join_paths(absl_logdir,'libabsl_log_internal_format.a'),
+  join_paths(absl_logdir,'libabsl_log_internal_log_sink_set.a'),
+  join_paths(absl_logdir,'libabsl_log_sink.a'),
+  join_paths(absl_logdir,'libabsl_log_internal_fnmatch.a'),
+  join_paths(absl_basedir,'libabsl_malloc_internal.a'),
+  join_paths(absl_synchdir,'libabsl_kernel_timeout_internal.a'),
+  join_paths(absl_basedir,'libabsl_spinlock_wait.a'),
+  join_paths(absl_synchdir,'libabsl_synchronization.a'),
+  join_paths(absl_numericdir,'libabsl_int128.a'),
+  join_paths(absl_logdir,'libabsl_log_globals.a'),
+  join_paths(absl_timedir,'libabsl_time.a'),
+  join_paths(absl_timedir,'libabsl_time_zone.a'),    
 ]
+
+#checking if the lib file exists for abseil. since some platform doesn't seem to build all of them.
+absl_deps2_list = []
+foreach lib : absl_deps2_base_list
+  if fs.exists(lib)
+    absl_deps2_list +=files(lib)
+  endif
+endforeach
+
+if buildtype == 'debug' #add libs that's required in debug
+  absl_deps2_list +=[
+    files(join_paths(absl_logdir,'libabsl_log_internal_check_op.a')),
+    files(join_paths(absl_logdir,'libabsl_log_internal_nullguard.a')),
+    files(join_paths(absl_synchdir,'libabsl_graphcycles_internal.a')),
+  ]
+endif
+
 absl_deps1_list = [
   files(join_paths(absl_hashdir,'libabsl_hash.a')),
   files(join_paths(absl_containerdir,'libabsl_raw_hash_set.a')),
@@ -129,10 +147,15 @@ libonnx = static_library(
 libonnx_dep = declare_dependency(
   link_with: libonnx,
 )
+if buildtype == 'debug'
+  libproto_name = 'libprotobuf-lited.a'
+else
+  libproto_name = 'libprotobuf-lite.a'
+endif
 libproto = static_library(
   'protobuf',
   'dummy.cpp',
-  objects:[files(join_paths(depsdir, 'protobuf-build', 'libprotobuf-lite.a'))]
+  objects:[files(join_paths(depsdir, 'protobuf-build', libproto_name))]
 )
 libproto_dep = declare_dependency(
   link_with: libproto,
