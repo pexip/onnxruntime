@@ -257,7 +257,7 @@ option(onnxruntime_USE_CUDA_INTERFACE "Build ONNXRuntime shared lib which is com
 option(onnxruntime_USE_OPENVINO_INTERFACE "Build ONNXRuntime shared lib which is compatible with OpenVINO EP interface" OFF)
 option(onnxruntime_USE_VITISAI_INTERFACE "Build ONNXRuntime shared lib which is compatible with Vitis-AI EP interface" OFF)
 option(onnxruntime_USE_QNN_INTERFACE "Build ONNXRuntime shared lib which is compatible with QNN EP interface" OFF)
-
+option(onnxruntime_BUILD_STATIC_BUNDLE "Build static bundle library" OFF)
 
 if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 11.1)
   message(FATAL_ERROR  "GCC version must be greater than or equal to 11.1")
@@ -1909,6 +1909,11 @@ if (onnxruntime_ENABLE_EXTERNAL_CUSTOM_OP_SCHEMAS)
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/external/protobuf/cmake
     COMMENT "Installing protobuf"
   )
+endif()
+
+if(onnxruntime_BUILD_STATIC_BUNDLE AND (NOT onnxruntime_BUILD_SHARED_LIB))
+  include(${CMAKE_CURRENT_LIST_DIR}/bundle_static_library.cmake)
+  build_bundle()
 endif()
 
 if(TARGET onnxruntime)
