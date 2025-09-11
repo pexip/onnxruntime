@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+bindir=${prefix}/@CMAKE_INSTALL_BINDIR@
+mandir=${prefix}/@CMAKE_INSTALL_MANDIR@
+docdir=${prefix}/@CMAKE_INSTALL_DOCDIR@
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+
+Name: Onnxruntime Bundle
+Description: ONNX runtime bundled static library
+URL: https://github.com/microsoft/@CMAKE_PROJECT_NAME@
+Version: @ORT_VERSION@
+Libs: -L${libdir} -lonnxruntime_bundle
+Cflags: @ONNX_CFLAGS@
