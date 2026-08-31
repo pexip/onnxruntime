@@ -168,8 +168,9 @@ function (build_bundle)
 
 endfunction()
 
-install( FILES ${CMAKE_CURRENT_BINARY_DIR}/libonnxruntime_bundle.a DESTINATION
-${CMAKE_INSTALL_LIBDIR})
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}onnxruntime_bundle${CMAKE_STATIC_LIBRARY_SUFFIX}
+  DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # create pkgconfig
 if (BUILD_PKGCONFIG_FILES)
